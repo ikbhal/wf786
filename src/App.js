@@ -33,6 +33,16 @@ export default function App() {
      setItemList(updatedList);
   };
 
+  const deleteItem = index => {
+    console.log("delete item index:" + index);
+
+    var updatedList = [...itemList];
+    // Remove dragged item
+    updatedList.splice(index, 1);
+     // Update State
+    setItemList(updatedList);
+  };
+
   return (
     <div className="App">
       <DragDropContext onDragEnd={handleDrop}>
@@ -57,6 +67,11 @@ export default function App() {
                         onClick={e => addSiblingNext(index)}
                       >
                       Add sibling next
+                      </div>
+                      <div  className="delete-item" 
+                        onClick={e => deleteItem(index)}
+                      >
+                      deleteItem
                       </div>
                     </div>
                   )}
