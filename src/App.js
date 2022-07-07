@@ -6,11 +6,11 @@ export default function App() {
 
   //const defaultList = ["A", "B", "C", "D", "E"];
   var idLast = 4;
-  const defaultList = [{"text": "A"},
-   {id: "1", text: "B", children: []},
-    {id: "2", text: "C", children:[]}, 
-    {id: "3",text: "D", children:[]}, 
-    {id: "4", text: "E", children:[]}
+  const defaultList = [{id: "1", "text": "A", children:[]},
+   {id: "2", text: "B", children: []},
+    {id: "3", text: "C", children:[]}, 
+    {id: "4",text: "D", children:[]}, 
+    {id: "5", text: "E", children:[]}
   ];
   // React state to track order of items
   const [itemList, setItemList] = useState(defaultList);
