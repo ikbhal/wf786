@@ -4,7 +4,14 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 export default function App() {
 
-  const defaultList = ["A", "B", "C", "D", "E"];
+  //const defaultList = ["A", "B", "C", "D", "E"];
+  var idLast = 4;
+  const defaultList = [{"text": "A"},
+   {id: "1", text: "B"},
+    {id: "2", text: "C"}, 
+    {id: "3",text: "D"}, 
+    {id: "4", text: "E"}
+  ];
   // React state to track order of items
   const [itemList, setItemList] = useState(defaultList);
 
@@ -27,7 +34,7 @@ export default function App() {
 
     var updatedList = [...itemList];
     // Add dropped item
-    var newItem = "added dummy item"
+    var newItem = {text:"added dummy item"}
     updatedList.splice(index+1, 0, newItem);
      // Update State
      setItemList(updatedList);
@@ -43,6 +50,13 @@ export default function App() {
     setItemList(updatedList);
   };
 
+  const saveItemText = (index, newItemText) => {
+    console.log("inside save item text");
+    var updatedList = [...itemList];
+    updatedList[index].text = newItemText;
+    setItemList(updatedList);
+  };
+
   return (
     <div className="App">
       <DragDropContext onDragEnd={handleDrop}>
@@ -54,7 +68,7 @@ export default function App() {
               ref={provided.innerRef}
             >
               {itemList.map((item, index) => (
-                <Draggable key={item} draggableId={item} index={index}>
+                <Draggable key={item.text} draggableId={item.text} index={index}>
                   {(provided) => (
                     <div
                       className="item-container"
@@ -62,7 +76,16 @@ export default function App() {
                       {...provided.dragHandleProps}
                       {...provided.draggableProps}
                     >
-                      {item}
+                      {item.text}
+                      <div className="edit-item">
+                        {/* <input type="text" value={item.text}/> */}
+
+                        <input
+                        type="text" 
+                        value={item.text}
+                        onChange={(e) => saveItemText(index, e.target.value)}
+                        />
+                      </div>
                       <div  className="add-sibling-next" 
                         onClick={e => addSiblingNext(index)}
                       >
