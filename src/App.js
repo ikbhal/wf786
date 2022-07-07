@@ -7,10 +7,10 @@ export default function App() {
   //const defaultList = ["A", "B", "C", "D", "E"];
   var idLast = 4;
   const defaultList = [{"text": "A"},
-   {id: "1", text: "B"},
-    {id: "2", text: "C"}, 
-    {id: "3",text: "D"}, 
-    {id: "4", text: "E"}
+   {id: "1", text: "B", children: []},
+    {id: "2", text: "C", children:[]}, 
+    {id: "3",text: "D", children:[]}, 
+    {id: "4", text: "E", children:[]}
   ];
   // React state to track order of items
   const [itemList, setItemList] = useState(defaultList);
@@ -34,7 +34,8 @@ export default function App() {
 
     var updatedList = [...itemList];
     // Add dropped item
-    var newItem = {text:"added dummy item"}
+    idLast = idLast+1;
+    var newItem = {text:"added dummy item", id: idLast}
     updatedList.splice(index+1, 0, newItem);
      // Update State
      setItemList(updatedList);
