@@ -5,7 +5,8 @@
 
 }
 .node-children{
-  margin-left: 50px;
+  /* margin-left: 50px; */
+  margin-left: 300px;
 }
 
 .toggle-children{
@@ -27,4 +28,20 @@
 }
 .node-text{
   padding: 5px;
+}
+
+.add-next-sibling-node{
+  margin: 2px;
+  background-color: greenyellow;
+}
+
+.path_section{
+  /* position:fixed; */
+  margin:10px;
+  padding: 10px;
+}
+
+.zoom-node{
+  margin: 2px;
+  background-color: greenyellow;
 }
