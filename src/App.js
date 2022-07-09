@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import "./App.css";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
-export default function App() {
 
-  //const defaultList = ["A", "B", "C", "D", "E"];
-  var idLast = 4;
+var idLast = 4;
   const defaultList = [{id: "1", "text": "A", children:[]},
    {id: "2", text: "B", children: []},
     {id: "3", text: "C", children:[]}, 
@@ -13,7 +11,7 @@ export default function App() {
     {id: "5", text: "E", children:[]}
   ];
   // React state to track order of items
-  const [itemList, setItemList] = useState(defaultList);
+ 
 
   // Function to update list on drop
   const handleDrop = (droppedItem) => {
@@ -58,8 +56,21 @@ export default function App() {
     setItemList(updatedList);
   };
 
+
+export default function App() {
+  const [itemList, setItemList] = useState(defaultList);
   return (
     <div className="App">
+      <Node/>
+    </div>
+  );
+}
+function Node() {
+
+  //const defaultList = ["A", "B", "C", "D", "E"];
+  
+  return (
+    <div className="Node">
       <DragDropContext onDragEnd={handleDrop}>
         <Droppable droppableId="list-container">
           {(provided) => (
