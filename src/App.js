@@ -43,6 +43,12 @@ function App() {
 
   const forceUpdate = useForceUpdate();
   const [first, setFirst] = useState(true);
+  const addToPath = () => {
+    console.log("inside app addtoTpath");
+    console.log("zoom node:", zoomNode);
+    
+  };
+
   return (
     <div className="App">
       <h1>Workflowy</h1>
@@ -65,6 +71,7 @@ function App() {
       {first &&
         <Node node={zoomNode}
         parentNode={null}
+        addToPath={addToPath}
         // setZoomNode={setZoomNode}
         // setZoomParentNode={setZoomParentNode}
       
@@ -109,7 +116,7 @@ function PathPart({node, onClick}){
   return (
     <>
     <span className="path-part">
-      {node.text}  and 
+      {node.text}  > 
     </span>
     {/* <span>|</span> */}
     </>
@@ -123,7 +130,7 @@ function useForceUpdate(){
   // is better than directly setting `value + 1`
 }
 
-function Node({node, parentNode}) {
+function Node({node, parentNode, addToPath}) {
   // console.log("inside node  data ...", node);
   // var {id, text, closed, children} = node; 
   // console.log("inside node id:", id, ", text:",
@@ -204,7 +211,18 @@ function Node({node, parentNode}) {
       // pathNodes.push(zoomNode);
       // forceUpdate();
       // appForceUpdate();
+
+      nodeAddToPath();
     }
+  };
+
+  const nodeAddToPath = () =>{
+    console.log("inside node component addToPath node:", node);
+    console.log("call parent addToapth ");
+    addToPath();
+    console.log("adding current node:", node , " to path Nodes");
+    pathNodes.push(node);
+    console.log("path Nodes:", pathNodes);
   };
 
   const forceUpdate = useForceUpdate();
@@ -216,6 +234,7 @@ function Node({node, parentNode}) {
         key={index} 
         node={child} 
         parentNode={node}
+        addToPath={nodeAddToPath}
        
          />
     );
