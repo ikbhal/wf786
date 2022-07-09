@@ -60,10 +60,21 @@ export const wfSlice = createSlice({
     addNodeToNodes: (state, node) => {
         console.log("add node to nodes node:", node);
     },
+    // not working yet
     setEditNode: (state, action) => {
         console.log("set edit action:", action);
         // node.editing = action.payload;
         // todo do we need to update nodes field?
+        // var {node, editing} = action.payload;
+        // console.log("node: ", node, " editing:", editing)
+        // node.editing = editing;
+        console.log("node id :", action.payload.node.id,
+            " ,editing:", action.payload.editing);
+        var nodeIndex = state.nodes.findIndex(n => n.id ==action.payload.node.id);
+        state.nodes[nodeIndex].editing = action.payload.editing;
+
+        console.log("state.nodes:", state.nodes);
+
     },
     setNodeText: (state, action) => {
         console.log("set node text action:", action);
