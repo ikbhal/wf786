@@ -19,13 +19,14 @@ import {PathSection} from './Path';
 
 function App() {
   var zoomNode = useSelector(selectZoomNode);
+  var zoomParentNode = useSelector(state => state.wf.zoomParentNode);
   console.log("zooom node:", zoomNode);
   var dispatch = useDispatch();
   return (
       <div className="App">
         <h1>Workflowy</h1>
         <PathSection/>
-        <Node node={zoomNode} parentId={null} 
+        <Node node={zoomNode} parentId={zoomParentNode} 
           addToPath={e=> dispatch(clearPathNodes())}/>
       </div>
   );

@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { zoomIn } from './WfSlice';
 
 export function PathSection() {
     const pathNodes = useSelector(state => state.wf.pathNodes);
@@ -15,9 +16,12 @@ export function PathSection() {
 };
 
 export function PathPart({node}){
+    var dispatch =useDispatch();
     return(
         <>
-        <span>
+        <span className="path-part"
+            onClick={e=> dispatch(zoomIn(node.id))}
+            >
             {node.text}
         </span>
         <span> > </span>

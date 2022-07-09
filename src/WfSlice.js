@@ -32,12 +32,27 @@ export const wfSlice = createSlice({
     startNode: startNode,
     nodes: nodes,
     zoomNode: startNode,
+    zoomParentNode : null,
     pathNodes: pathNodes,
     nodeIdLast: nodeIdLast
   },
   reducers: {
     zoomIn: (state, action) => {
         console.log("zoom in reducer action:", action);
+        var id = action.payload;
+        console.log("path part node id:", id);
+        var node = state.nodes.find(n => n.id ==id);
+        console.log("node:", node);
+        // remove path parts after action.pyalod
+        var pi = state.pathNodes.findIndex(n=> n.id == id);
+        var pathNodes = state.pathNodes.slice(0, pi+1);
+        state.pathNodes =pathNodes;
+        // set zoom node to id 
+        state.zoomNode = node;
+        // set zoom parent node 
+        var zoomParentNode = pi>0?state.pathNodes[pi-1]: null;
+        state.zoomParentNode = zoomParentNode;
+        
     },
     pathNodeClick:(state, pathNode) =>{
         console.log("path node clock pathNode:", pathNode);
