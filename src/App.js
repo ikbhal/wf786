@@ -7,7 +7,8 @@ import {
   selectNodeIdLast,
   addChildAtEnd,
   toggleNodeChildren,
-  deleteNode
+  deleteNode,
+  addNextSibling
 } from './WfSlice';
 import './App.css';
 
@@ -55,6 +56,12 @@ function Node({node}) {
         onClick={e=>dispatch(addChildAtEnd(node))}
       >
         addchild
+      </span>
+
+      <span className="add-next-sibling-node"
+        onClick={e=> dispatch(addNextSibling(node.id))}
+        >
+        addsiblingnext
       </span>
 
       <span className="node-text">

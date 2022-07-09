@@ -60,8 +60,8 @@ export const wfSlice = createSlice({
         state.nodes = fnodes;
 
     },
-    addNextSibling : (ste, node) =>{
-        console.log("add next sibling node:", node);
+    addNextSibling : (ste, action) =>{
+        console.log("add next sibling action:", action);
     },
     addChildAtEnd: (state, action) =>{
         console.log('add child at end for action :', action);
