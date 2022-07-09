@@ -22,18 +22,10 @@ function App() {
   var zoomParentNode = useSelector(state => state.wf.zoomParentNode);
   console.log("zooom node:", zoomNode);
   var dispatch = useDispatch();
-
-  // const [name, setName] = useState("");
+ 
   return (
       <div className="App">
         <h1>Workflowy</h1>
-
-        {/* <input
-          type="text" 
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        /> */}
-
         <PathSection/>
         <Node node={zoomNode} parentId={zoomParentNode} 
           addToPath={e=> dispatch(clearPathNodes())}/>
@@ -69,7 +61,7 @@ function Node({node, parentId,addToPath}) {
   );
 
   var [isEdit, setEdit] = useState(false);
-  var [text, setText] = useState(node.text);
+  var [text, setText] = useState(snode.text);
   return (
     <>
     {snode &&
@@ -109,7 +101,7 @@ function Node({node, parentId,addToPath}) {
       {!isEdit &&
         <span className="node-text"
           onClick={e=> setEdit(true)}>
-        {node.text} 
+        {snode.text} 
         </span>
       }
 
