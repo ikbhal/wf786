@@ -104,6 +104,9 @@ function PathSection({pathNodes}){
 
   const pathPartHandler = (node) =>{
     console.log("inside path part handler, node: ", node);
+    
+    newZoomNode = node;
+    console.log("setting newZoomNode:", newZoomNode);
   };
 
   pathNodes.map( (node, index) => {
@@ -133,7 +136,9 @@ function PathPart({node, onClick}){
   "onClick:", onClick);
   return (
     <>
-    <span className="path-part">
+    <span className="path-part"
+      onClick={onClick}
+    >
       {node.text}  > 
     </span>
     {/* <span>|</span> */}
