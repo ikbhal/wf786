@@ -8,22 +8,30 @@ import {
   addChildAtEnd,
   toggleNodeChildren,
   deleteNode,
-  addNextSibling
+  addNextSibling,
+  zoomIn,
+  addPathToPathNodes,
+  clearPathNodes
 } from './WfSlice';
 import './App.css';
+
+import {PathSection} from './Path';
 
 function App() {
   var zoomNode = useSelector(selectZoomNode);
   console.log("zooom node:", zoomNode);
+  var dispatch = useDispatch();
   return (
       <div className="App">
         <h1>Workflowy</h1>
-        <Node node={zoomNode} parentId={null}/>
+        <PathSection/>
+        <Node node={zoomNode} parentId={null} 
+          addToPath={e=> dispatch(clearPathNodes())}/>
       </div>
   );
 }
 
-function Node({node, parentId}) {
+function Node({node, parentId,addToPath}) {
   const dispatch = useDispatch();
 
   var snode =  useSelector(state =>{ 
@@ -35,14 +43,21 @@ function Node({node, parentId}) {
     return n2.children;
   });
 
+  const addToPathInternal = () =>{
+    addToPath();
+    // clearPathNodes
+    dispatch(addPathToPathNodes(node.id));
+  };
+
   var childNodes = children.map((child, index) => 
     <Node 
       key={index} 
       node={child}
       parentId={node.id}
+      addToPath={addToPathInternal}
       />
-    
   );
+
   return (
     <>
     {snode &&
@@ -69,6 +84,14 @@ function Node({node, parentId}) {
         onClick={e=> dispatch(addNextSibling({siblingId:node.id, parentId:parentId}))}
         >
         addsiblingnext
+      </span>
+
+      <span className="zoom-node"
+        onClick={e => {
+          addToPathInternal();
+          // dispatch(zoomIn(node.id));
+        } }>
+        zoomin
       </span>
 
       <span className="node-text">

@@ -36,8 +36,8 @@ export const wfSlice = createSlice({
     nodeIdLast: nodeIdLast
   },
   reducers: {
-    zoomIn: (state, node) => {
-        console.log("zoom in reducer node:", node);
+    zoomIn: (state, action) => {
+        console.log("zoom in reducer action:", action);
     },
     pathNodeClick:(state, pathNode) =>{
         console.log("path node clock pathNode:", pathNode);
@@ -148,6 +148,15 @@ export const wfSlice = createSlice({
     },
     setNodeText: (state, action) => {
         console.log("set node text action:", action);
+    },
+    clearPathNodes: (state) =>{
+        console.log("inside clearPathNodes");
+        state.pathNodes = [];
+    },
+    addPathToPathNodes: (state, action) => {
+        console.log("inside addPathToPathNodes action:", action);
+        var node = state.nodes.find(n=> n.id ==action.payload);
+        state.pathNodes.push(node);
     }
   },
 });
@@ -156,7 +165,8 @@ export const { zoomIn, pathNodeClick,
     deleteNode,addNextSibling,
     addChildAtEnd,toggleNodeChildren,
     incrNodeIdLast,addNodeToNodes,
-    setEditNode,setNodeText } = wfSlice.actions;
+    setEditNode,setNodeText,
+    clearPathNodes,addPathToPathNodes } = wfSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
