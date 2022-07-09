@@ -182,6 +182,9 @@ export const wfSlice = createSlice({
         console.log("inside addPathToPathNodes action:", action);
         var node = state.nodes.find(n=> n.id ==action.payload);
         state.pathNodes.push(node);
+    },
+    search: (state, action) =>{
+        console.log("inside search");
     }
   },
 });

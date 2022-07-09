@@ -16,6 +16,7 @@ import {
 import './App.css';
 
 import {PathSection} from './Path';
+import {Search} from './Search';
 
 function App() {
   var zoomNode = useSelector(selectZoomNode);
@@ -26,6 +27,7 @@ function App() {
   return (
       <div className="App">
         <h1>Workflowy</h1>
+        <Search/>
         <PathSection/>
         <Node node={zoomNode} parentId={zoomParentNode} 
           addToPath={e=> dispatch(clearPathNodes())}/>
