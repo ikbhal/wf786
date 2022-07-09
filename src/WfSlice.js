@@ -155,14 +155,20 @@ export const wfSlice = createSlice({
         // node.editing = editing;
         console.log("node id :", action.payload.node.id,
             " ,editing:", action.payload.editing);
-        var nodeIndex = state.nodes.findIndex(n => n.id ==action.payload.node.id);
-        state.nodes[nodeIndex].editing = action.payload.editing;
+        var nodeIndex = state.wf.nodes.findIndex(n => n.id ==action.payload.node.id);
+        state.wf.nodes[nodeIndex].editing = action.payload.editing;
 
-        console.log("state.nodes:", state.nodes);
+        console.log("state.nodes:", state.wf.nodes);
 
     },
-    setNodeText: (state, action) => {
+    setNodeText: (state, action) =>{
         console.log("set node text action:", action);
+        var id = action.payload.id;
+        var text = action.payload.text;
+        var nodes = [...state.nodes];
+        var ni = nodes.findIndex(n => n.id == id);
+        nodes[ni].text = nodes[ni].text + "Ikbhal changes";
+        state.nodes = nodes;
     },
     clearPathNodes: (state) =>{
         console.log("inside clearPathNodes");

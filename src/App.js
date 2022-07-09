@@ -59,6 +59,7 @@ function Node({node, parentId,addToPath}) {
       />
   );
 
+  var [text, setText] = useState(node.text);
   return (
     <>
     {snode &&
@@ -97,6 +98,25 @@ function Node({node, parentId,addToPath}) {
 
       <span className="node-text">
         {node.text}
+      </span>
+
+      <span className = "node-edit-text">
+        <input  type="text" value={node.text}
+          onKeyPress = {e=> {
+            console.log(e);
+            if(e.key === 'Enter'){//event.key === 'Enter'
+              console.log('enter key pressed text:', text);
+              dispatch(setNodeText({id:node.id, text:text}));
+            }
+          }}
+          onChange={e=> {
+            console.log("on change e:", e);
+            // dispatch(setNodeText({id:node.id, text:e.target.value}));
+            setText(e.target.value);
+            e.preventDefault();
+            }
+          } />
+        {/* <button onClick=></span>>Save</button> */}
       </span>
 
       {!snode.closed &&
