@@ -48,11 +48,40 @@ export const wfSlice = createSlice({
     addNextSibling : (ste, node) =>{
         console.log("add next sibling node:", node);
     },
-    addChildAtEnd: (state, node) =>{
-        console.log('add child at end for node :', node);
+    addChildAtEnd: (state, action) =>{
+        console.log('add child at end for action :', action);
+        var pnode = action.payload;
+        console.log(" pnode:", pnode);
+
+        //duplicate nodes 
+        var nodes = [...state.nodes];
+        console.log("duplicat nodes:", nodes);
+        var node = nodes.find(n=>n.id ==pnode.id);
+
+        // increament node id last
+        state.nodeIdLast++;
+        var newChild =  {
+            id: state.nodeIdLast,
+            text: "n"+state.nodeIdLast,
+            editing:false, 
+            children: []};
+
+        console.log("newChild:", newChild);
+        
+        node.children.push(newChild);
+        // add child to nodes
+        nodes.push(newChild);
+        // reset node states
+        state.nodes = nodes;
+        console.log("nodes:", nodes);
+        console.log("state.nodes", state.nodes);
     },
-    toggleNodeChildren: (state, node) => {
-        console.log("toggle node children node:", node);
+    toggleNodeChildren: (state, action) => {
+        console.log("toggle node children action:", action);
+        var nodes = [...state.nodes];
+        var snode = nodes.find(n => n.id ==action.payload);
+        snode.closed =! snode.closed;
+        state.nodes = nodes;
     },
     incrNodeIdLast: (state) => {
         console.log("increment node id last");
@@ -83,7 +112,7 @@ export const wfSlice = createSlice({
 });
 
 export const { zoomIn, pathNodeClick,
-     deleteNode,addNextSibling,
+    deleteNode,addNextSibling,
     addChildAtEnd,toggleNodeChildren,
     incrNodeIdLast,addNodeToNodes,
     setEditNode,setNodeText } = wfSlice.actions;
