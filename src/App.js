@@ -22,9 +22,18 @@ function App() {
   var zoomParentNode = useSelector(state => state.wf.zoomParentNode);
   console.log("zooom node:", zoomNode);
   var dispatch = useDispatch();
+
+  // const [name, setName] = useState("");
   return (
       <div className="App">
         <h1>Workflowy</h1>
+
+        {/* <input
+          type="text" 
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        /> */}
+
         <PathSection/>
         <Node node={zoomNode} parentId={zoomParentNode} 
           addToPath={e=> dispatch(clearPathNodes())}/>
@@ -59,6 +68,7 @@ function Node({node, parentId,addToPath}) {
       />
   );
 
+  var [isEdit, setEdit] = useState(false);
   var [text, setText] = useState(node.text);
   return (
     <>
@@ -96,28 +106,28 @@ function Node({node, parentId,addToPath}) {
         zoomin
       </span>
 
-      <span className="node-text">
-        {node.text}
-      </span>
+      {!isEdit &&
+        <span className="node-text"
+          onClick={e=> setEdit(true)}>
+        {node.text} 
+        </span>
+      }
 
+      {isEdit &&
       <span className = "node-edit-text">
-        <input  type="text" value={node.text}
-          onKeyPress = {e=> {
-            console.log(e);
-            if(e.key === 'Enter'){//event.key === 'Enter'
-              console.log('enter key pressed text:', text);
-              dispatch(setNodeText({id:node.id, text:text}));
-            }
-          }}
-          onChange={e=> {
-            console.log("on change e:", e);
-            // dispatch(setNodeText({id:node.id, text:e.target.value}));
+        <input
+          type="text" 
+          value={text}
+
+          onChange={(e) => {
             setText(e.target.value);
-            e.preventDefault();
-            }
-          } />
-        {/* <button onClick=></span>>Save</button> */}
+            dispatch(setNodeText({id:node.id, text:e.target.value}));
+          }}
+          
+          onBlur={ e => setEdit(false)}
+        />
       </span>
+      }
 
       {!snode.closed &&
         <div className="node-children">
