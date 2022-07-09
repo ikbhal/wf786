@@ -43,16 +43,34 @@ function App() {
 
   const forceUpdate = useForceUpdate();
   const [first, setFirst] = useState(true);
+
+  const [showPath, setShowPath] = useState(true);
   const addToPath = () => {
     console.log("inside app addtoTpath");
     console.log("zoom node:", zoomNode);
+    console.log("set path nodes to empy array");
+    pathNodes = [];
+
+    //toggle, toggle to reflect  -> wont work here base case, need to do at call end, need to pass
+   // setShowPath(true);
+    
     
   };
 
   return (
     <div className="App">
       <h1>Workflowy</h1>
-      <PathSection/>
+      
+      <button onClick={e => {
+        console.log("show path toggle button ");
+        setShowPath(!showPath);
+      }}>
+        {showPath? "hide path": "show path"}
+      </button>
+
+      {showPath &&
+      <PathSection pathNodes={pathNodes}/>  
+      }
       {/* <input type="text" value={text} onChange={onChangeHandler}/> */}
       <button onClick={e=>{
         console.log("setting zoom at the root level to new zoom node ", newZoomNode);
@@ -81,7 +99,7 @@ function App() {
   );
 }
 
-function PathSection(){
+function PathSection({pathNodes}){
   console.log("inside pathsection pathNodes:", pathNodes);
 
   const pathPartHandler = (node) =>{
