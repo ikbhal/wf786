@@ -42,8 +42,23 @@ export const wfSlice = createSlice({
     pathNodeClick:(state, pathNode) =>{
         console.log("path node clock pathNode:", pathNode);
     },
-    deleteNode: (state, node) =>{
-        console.log("delete node " , node);
+    deleteNode: (state, action) =>{
+        console.log("delete node " , action);
+        var nodes = [...state.nodes];
+        var fnodes = nodes.filter(n => n.id !=action.payload);
+        
+        console.log("nodes:",nodes);
+        console.log("fnodes:", fnodes);
+        for(var i=0;i<fnodes.length;i++){
+            var fn = fnodes[i];
+            var fnchildren = fn.children;
+            var fnci = fnchildren.findIndex(n=>n.id ==action.payload);
+            if(fnci !=-1){
+                fn.children = fnchildren.filter(n=> n.id !=action.payload);
+            }
+        }
+        state.nodes = fnodes;
+
     },
     addNextSibling : (ste, node) =>{
         console.log("add next sibling node:", node);

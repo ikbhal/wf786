@@ -6,18 +6,17 @@ import {
   setNodeText,
   selectNodeIdLast,
   addChildAtEnd,
-  toggleNodeChildren
+  toggleNodeChildren,
+  deleteNode
 } from './WfSlice';
 import './App.css';
 
 function App() {
   var zoomNode = useSelector(selectZoomNode);
   console.log("zooom node:", zoomNode);
-  var totalNodes = useSelector(selectNodeIdLast)
   return (
       <div className="App">
         <h1>Workflowy</h1>
-        <p>Total nodes: {totalNodes}</p>
         <Node node={zoomNode} />
       </div>
   );
@@ -37,11 +36,19 @@ function Node({node}) {
 
   var childNodes = children.map((child, index) => <Node key={index} node={child}/>);
   return (
+    <>
+    {snode &&
     <div className="node">
       <span className="toggle-children"
         onClick ={e => dispatch(toggleNodeChildren(node.id))}
       >
         {snode.closed?"open":"close"}
+      </span>
+
+      <span className="delete-node"
+        onClick ={e => dispatch(deleteNode(node.id))}
+        >
+        delete
       </span>
 
       <span className="add-child-node"
@@ -60,6 +67,8 @@ function Node({node}) {
         </div>
       }
     </div>
+    }
+    </>
   );
 }
 export default App;
