@@ -60,8 +60,34 @@ export const wfSlice = createSlice({
         state.nodes = fnodes;
 
     },
-    addNextSibling : (ste, action) =>{
+    addNextSibling : (state, action) =>{
         console.log("add next sibling action:", action);
+        //siblingId:node.id, parentId:parentId
+        var siblingId = action.payload.siblingId;
+        var parentId = action.payload.parentId;
+        console.log("siblingId:", siblingId, ", parentId:", parentId);
+        // duplicate state node
+        var nodes = [...state.nodes];
+        var pnode = nodes.find(n=> n.id == parentId);
+        var snode = nodes.find(n=> n.id == siblingId);
+        // increment nodeidlast
+        state.nodeIdLast++;
+        var childNode = {
+            id: state.nodeIdLast,
+            text: "n"+state.nodeIdLast,
+            closed: true, 
+            editing:false, 
+            children: []
+        };
+        //add new node to nodes
+        nodes.push(childNode);
+        // find sibling node position parent node childrens
+        var psi = pnode.children.findIndex(n=>n.id==siblingId);
+        // add new child node at parent children after sibling nod
+        pnode.children.splice(psi+1, 0, childNode);
+        // restore nodes to state nodes
+        state.nodes = nodes;
+
     },
     addChildAtEnd: (state, action) =>{
         console.log('add child at end for action :', action);

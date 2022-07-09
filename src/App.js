@@ -18,12 +18,12 @@ function App() {
   return (
       <div className="App">
         <h1>Workflowy</h1>
-        <Node node={zoomNode} />
+        <Node node={zoomNode} parentId={null}/>
       </div>
   );
 }
 
-function Node({node}) {
+function Node({node, parentId}) {
   const dispatch = useDispatch();
 
   var snode =  useSelector(state =>{ 
@@ -35,7 +35,14 @@ function Node({node}) {
     return n2.children;
   });
 
-  var childNodes = children.map((child, index) => <Node key={index} node={child}/>);
+  var childNodes = children.map((child, index) => 
+    <Node 
+      key={index} 
+      node={child}
+      parentId={node.id}
+      />
+    
+  );
   return (
     <>
     {snode &&
@@ -59,7 +66,7 @@ function Node({node}) {
       </span>
 
       <span className="add-next-sibling-node"
-        onClick={e=> dispatch(addNextSibling(node.id))}
+        onClick={e=> dispatch(addNextSibling({siblingId:node.id, parentId:parentId}))}
         >
         addsiblingnext
       </span>
