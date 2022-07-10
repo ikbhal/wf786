@@ -4,22 +4,22 @@ import { useSelector, useDispatch } from 'react-redux';
 import { zoomIn } from './WfSlice';
 
 export function PathSection() {
-    const pathNodeIndices = useSelector(state => state.wf.pathNodeIndices);
+    const pathNodeIds = useSelector(state => state.wf.pathNodeIds);
     return (
         <div>
             <p>Path</p>
-            {pathNodeIndices.length>0 && 
-                pathNodeIndices.map((nodeId, index)=><PathPart key={index} nodeId={nodeId}/>)
+            {pathNodeIds.length>0 && 
+                pathNodeIds.map((nodeId, index)=><PathPart key={index} nodeId={nodeId}/>)
             }
         </div>
     );
 };
 
-export function PathSectionWithNodes({pathNodeIndices}) {
+export function PathSectionWithNodes({pathNodeIds}) {
     return (
         <div>
-            {pathNodeIndices.length>0 && 
-                pathNodeIndices.map((nodeId, index)=><PathPart key={index} nodeId={nodeId}/>)
+            {pathNodeIds.length>0 && 
+                pathNodeIds.map((nodeId, index)=><PathPart key={index} nodeId={nodeId}/>)
             }
         </div>
     );

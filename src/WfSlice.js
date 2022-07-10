@@ -2,15 +2,13 @@ import { createSlice } from '@reduxjs/toolkit'
 
 let nodes = [];
 let nodeIdLast = 4;
-let startNode = null;
-let zoomNode = null;
-let pathNodeIndices = [];
-pathNodeIndices.push(0);
+let pathNodeIds = [];
+pathNodeIds.push(0);
 
 let n2 = {id: 2, text: "n2", closed: true, editing:false, children: []};
 let n3 = {id: 3, text: "n3", closed: true, editing:false, children: []};
 let n4 = {id: 4, text: "n4", closed: true, editing:false, children: []};
-let n1 = {id: 1, text: "n1", closed: true, editing:false, children: [n2, n3, n4]};
+let n1 = {id: 1, text: "n1", closed: true, editing:false, children: [2, 3, 4]};
 
 nodes.push(n1);
 nodes.push(n2);
@@ -20,11 +18,11 @@ nodes.push(n4);
 export const wfSlice = createSlice({
   name: 'wf',
   initialState: {
-    startNodeIndex: 0,
+    startNodeId: 1,
     nodes: nodes,
-    zoomNodeIndex: 0,
-    zoomParentNodeIndex : -1,
-    pathNodeIndices: pathNodeIndices,
+    zoomNodeId: 1,
+    zoomParentNodeId : -1,// -1 used here as invalid id
+    pathNodeIds: pathNodeIds,
     nodeIdLast: nodeIdLast,
     searchText: "",
     searchResult: []
@@ -38,13 +36,13 @@ export const wfSlice = createSlice({
         console.log("node:", node);
         // remove path parts after action.pyalod
         // var pi = state.pathNodes.findIndex(n=> n.id == id);
-        var pi = state.pathNodeIndices.findIndex(pid => id==pid);
-        var pathNodeIndices = state.pathNodeIndices.slice(0, pi+1);
-        state.pathNodeIndices =pathNodeIndices;
+        var pi = state.pathNodeIds.findIndex(pid => id==pid);
+        var pathNodeIds = state.pathNodeIds.slice(0, pi+1);
+        state.pathNodeIds =pathNodeIds;
         // set zoom node to id 
-        state.zoomNodeIndex = pi;
+        state.zoomNodeId = pi;
         // set zoom parent node 
-        var zoomParentNodeIndex = pi>0?state.pathNodeIndices[pi-1]: -1;
+        var zoomParentNodeIndex = pi>0?state.pathNodeIds[pi-1]: -1;
         state.zoomParentNodeIndex = zoomParentNodeIndex;
         
     },
@@ -61,7 +59,7 @@ export const wfSlice = createSlice({
 
         // delete node in parent nodes
         state.nodes.forEach(n => {
-            var ci = n.children.findIndex(c=>c.id ==deleteNodeId);
+            var ci = n.children.findIndex(cid=>cid ==deleteNodeId);
             if(ci !=-1){
                 n.children.splice(ci,1);
             }
@@ -78,8 +76,9 @@ export const wfSlice = createSlice({
         var snode = state.nodes.find(n=> n.id == siblingId);
         // increment nodeidlast
         state.nodeIdLast++;
+        var childNodeId = state.nodeIdLast;
         var childNode = {
-            id: state.nodeIdLast,
+            id: childNodeId,
             text: "n"+state.nodeIdLast,
             closed: true, 
             editing:false, 
@@ -88,9 +87,9 @@ export const wfSlice = createSlice({
         //add new node to nodes
         state.nodes.push(childNode);
         // find sibling node position parent node childrens
-        var psi = pnode.children.findIndex(n=>n.id==siblingId);
+        var psi = pnode.children.findIndex(nid=>nid==siblingId);
         // add new child node at parent children after sibling nod
-        pnode.children.splice(psi+1, 0, childNode);
+        pnode.children.splice(psi+1, 0, childNodeId);
         // restore nodes to state nodes
         // state.nodes = nodes;
 
@@ -98,18 +97,19 @@ export const wfSlice = createSlice({
     addChildAtEnd: (state, action) =>{
         console.log('add child at end for action :', action);
         // debugger;
-        var pnode = action.payload;
-        console.log(" pnode:", pnode);
-        var node = state.nodes.find(n=>n.id ==pnode.id);
+        var pnodeId = action.payload;
+        console.log(" pnodeId:", pnodeId);
+        var node = state.nodes.find(n=>n.id ==pnodeId);
         // increament node id last
         state.nodeIdLast++;
+        var newChildId = state.nodeIdLast;
         var newChild =  {
-            id: state.nodeIdLast,
+            id: newChildId,
             text: "n"+state.nodeIdLast,
             editing:false, 
             children: []};
         console.log("newChild:", newChild);
-        node.children.push(newChild);
+        node.children.push(newChildId);
         console.log("child added to parent node:", node," newChild:", newChild);
         // add child to nodes
         state.nodes.push(newChild);
@@ -150,15 +150,15 @@ export const wfSlice = createSlice({
         var ni = state.nodes.findIndex(n => n.id == id);
         state.nodes[ni].text =text;
     },
-    clearPathNodeIndices: (state) =>{
-        console.log("inside clearPathNodeIndices");
-        state.pathNodeIndices = [];
+    clearpathNodeIds: (state) =>{
+        console.log("inside clearpathNodeIds");
+        state.pathNodeIds = [];
     },
-    addPathToPathNodeIndices: (state, action) => {
-        console.log("inside addPathToPathNodeIndices action:", action);
+    addPathTopathNodeIds: (state, action) => {
+        console.log("inside addPathTopathNodeIds action:", action);
         var nodeId = action.payload;
         // var node = state.nodes.find(n=> n.id ==action.payload);
-        state.pathNodeIndices.push(nodeId);
+        state.pathNodeIds.push(nodeId);
     },
     searchNodes: (state, action) =>{
         console.log("inside search action:", action);
@@ -173,8 +173,8 @@ export const wfSlice = createSlice({
         var pathArray = [];
         var pathPart = null;
         var path = [];
-        var node = state.nodes[state.startNodeIndex];
-        searchFromRootNodeHelper(node, text, path, pathArray);
+        var node = state.nodes[state.startNodeId];
+        searchFromRootNodeHelper(state.nodes, state.startNodeId, text, path, pathArray);
         console.log("pathArray:", pathArray);
         state.searchResult = pathArray;
     }
@@ -187,17 +187,19 @@ function searchNodesHelper(nodes, text){
     return result;
 }
 
-function searchFromRootNodeHelper(node, text, path, pathArray){
-    
-    console.log("inside searchNodesHelper nodes:", node,
-     ", text:", text, ", path:", path, ", pathArray:", pathArray);
-    if (node ){
+function searchFromRootNodeHelper(nodes, nodeIndex, text, path, pathArray){
+    var node = nodes.length>nodeIndex? nodes[nodeIndex]:null;
+
+    console.log("inside searchNodesHelper nodeIndex:", nodeIndex,
+    ",node:", node,
+    ", text:", text, ", path:", path, ", pathArray:", pathArray);
+    if (node !=null){
         path.push(node.id);
         if(node.text && node.text.includes(text)){
             pathArray.push([...path]);
         }
-        node.children.forEach((child, index) => {
-            searchFromRootNodeHelper(child, text, path, pathArray);
+        node.children.forEach((childIndex, index) => {
+            searchFromRootNodeHelper(nodes, childIndex, text, path, pathArray);
             path.pop();
         });
     }else {
@@ -210,7 +212,7 @@ export const { zoomIn, pathNodeClick,
     addChildAtEnd,toggleNodeChildren,
     incrNodeIdLast,addNodeToNodes,
     setEditNode,setNodeText,
-    clearPathNodeIndices,addPathToPathNodeIndices,
+    clearpathNodeIds,addPathTopathNodeIds,
     searchNodes } = wfSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
@@ -228,14 +230,17 @@ export const { zoomIn, pathNodeClick,
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 export const selectNodes = (state) => state.wf.nodes;
 export const selectStartNode = (state) => {
-    var node = state.wf.nodes[state.wf.startNodeIndex];
+    var node = state.wf.nodes[state.wf.startNodeId];
     return node;
 };
 export const selectZoomNode =(state) => {
-    var node = state.wf.nodes[state.wf.zoomNodeIndex];
+    var node = state.wf.nodes[state.wf.zoomNodeId];
     return node;
 }
+
+export const selectZoomNodeId =(state) => state.wf.zoomNodeId;
 export const selectPathNodes = (state) => state.wf.pathNodes;
 export const selectNodeIdLast = (state) => state.wf.nodeIdLast;
+// export const selectNodeById = (state, nodeId) => state.wf.nodes.find(node =>node.id == nodeId);
 
 export default wfSlice.reducer;

@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  selectZoomNode,
-  setEditNode,
   setNodeText,
-  selectNodeIdLast,
   addChildAtEnd,
   toggleNodeChildren,
   deleteNode,
   addNextSibling,
-  zoomIn,
-  addPathToPathNodeIndices,
-  clearPathNodeIndices
+  addPathToPathNodeIds,
+  clearPathNodeIds,
+  selectZoomNodeId
 } from './WfSlice';
 import './App.css';
 
@@ -19,9 +16,11 @@ import {PathSection} from './Path';
 import {Search} from './Search';
 
 function App() {
-  var zoomNode = useSelector(selectZoomNode);
-  var zoomParentNode = useSelector(state => state.wf.zoomParentNode);
-  console.log("zooom node:", zoomNode);
+  // var zoomNode = useSelector(selectZoomNode);
+  var zoomNodeId = useSelector(selectZoomNodeId);
+  // debugger;
+  var zoomParentNodeId = useSelector(state => state.wf.zoomParentNodeId);
+  console.log("zooom node id:", zoomNodeId);
   var dispatch = useDispatch();
  
   return (
@@ -29,35 +28,39 @@ function App() {
         <h1>Workflowy</h1>
         <Search/>
         <PathSection/>
-        <Node node={zoomNode} parentId={zoomParentNode} 
-          addToPath={e=> dispatch(clearPathNodeIndices())}/>
+        <Node nodeId={zoomNodeId} parentId={zoomParentNodeId} 
+          addToPath={e=> dispatch(clearPathNodeIds())}/>
       </div>
   );
 }
 
-function Node({node, parentId,addToPath}) {
+function Node({nodeId, parentId,addToPath}) {
   const dispatch = useDispatch();
 
-  var snode =  useSelector(state =>{ 
-    var n2 = state.wf.nodes.find(n => n.id == node.id);
-    return n2;
-  });
-  var children = useSelector(state =>{ 
-    var n2 = state.wf.nodes.find(n => n.id == node.id);
-    return n2.children;
-  });
+  // var snode =  useSelector(state =>{ 
+  //   var n2 = state.wf.nodes.find(n => n.id == node.id);
+  //   return n2;
+  // });
+  // var snode = useSelector(selectNodeById(nodeId));
+  var snode = useSelector(state => state.wf.nodes.find(n=>n.id ==nodeId));
+  // var children = useSelector(state =>{ 
+  //   var n2 = state.wf.nodes.find(n => n.id == nodeId);
+  //   return n2.children;
+  // });
+  // debugger;
+  var children = snode.children;
 
   const addToPathInternal = () =>{
     addToPath();
     // clearPathNodes
-    dispatch(addPathToPathNodeIndices(node.id));
+    dispatch(addPathToPathNodeIds(nodeId));
   };
 
-  var childNodes = children.map((child, index) => 
+  var childNodes = children.map((childId, index) => 
     <Node 
       key={index} 
-      node={child}
-      parentId={node.id}
+      nodeId={childId}
+      parentId={nodeId}
       addToPath={addToPathInternal}
       />
   );
@@ -69,25 +72,25 @@ function Node({node, parentId,addToPath}) {
     {snode &&
     <div className="node">
       <span className="toggle-children"
-        onClick ={e => dispatch(toggleNodeChildren(node.id))}
+        onClick ={e => dispatch(toggleNodeChildren(nodeId))}
       >
         {snode.closed?"open":"close"}
       </span>
 
       <span className="delete-node"
-        onClick ={e => dispatch(deleteNode(node.id))}
+        onClick ={e => dispatch(deleteNode(nodeId))}
         >
         delete
       </span>
 
       <span className="add-child-node"
-        onClick={e=>dispatch(addChildAtEnd(node))}
+        onClick={e=>dispatch(addChildAtEnd(nodeId))}
       >
         addchild
       </span>
 
       <span className="add-next-sibling-node"
-        onClick={e=> dispatch(addNextSibling({siblingId:node.id, parentId:parentId}))}
+        onClick={e=> dispatch(addNextSibling({siblingId:nodeId, parentId:parentId}))}
         >
         addsiblingnext
       </span>
@@ -115,7 +118,7 @@ function Node({node, parentId,addToPath}) {
 
           onChange={(e) => {
             setText(e.target.value);
-            dispatch(setNodeText({id:node.id, text:e.target.value}));
+            dispatch(setNodeText({id:nodeId, text:e.target.value}));
           }}
           
           onBlur={ e => setEdit(false)}
