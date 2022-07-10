@@ -1,8 +1,8 @@
 # wf786
 workflowy.com clone attempt 786 reverse drag and drop practice
 
-branch wf774
+branch wf772
+still need to check search path working or not
 
-startNode, 
-zoomNode set index not node,
-change it selector and other derived usage
+not sure why add child is not working, need to further check
+also check search path is not working 
