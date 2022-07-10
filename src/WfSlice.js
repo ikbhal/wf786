@@ -60,6 +60,8 @@ export const wfSlice = createSlice({
     pathNodeClick:(state, pathNode) =>{
         console.log("path node clock pathNode:", pathNode);
     },
+    // delete node working , might not work with duplicate nodes = [... state.nodes]
+    // need differnet implementation
     deleteNode: (state, action) =>{
         console.log("delete node " , action);
         var nodes = [...state.nodes];
@@ -85,9 +87,9 @@ export const wfSlice = createSlice({
         var parentId = action.payload.parentId;
         console.log("siblingId:", siblingId, ", parentId:", parentId);
         // duplicate state node
-        var nodes = [...state.nodes];
-        var pnode = nodes.find(n=> n.id == parentId);
-        var snode = nodes.find(n=> n.id == siblingId);
+        // var nodes = [...state.nodes];
+        var pnode = state.nodes.find(n=> n.id == parentId);
+        var snode = state.nodes.find(n=> n.id == siblingId);
         // increment nodeidlast
         state.nodeIdLast++;
         var childNode = {
@@ -98,13 +100,13 @@ export const wfSlice = createSlice({
             children: []
         };
         //add new node to nodes
-        nodes.push(childNode);
+        state.nodes.push(childNode);
         // find sibling node position parent node childrens
         var psi = pnode.children.findIndex(n=>n.id==siblingId);
         // add new child node at parent children after sibling nod
         pnode.children.splice(psi+1, 0, childNode);
         // restore nodes to state nodes
-        state.nodes = nodes;
+        // state.nodes = nodes;
 
     },
     addChildAtEnd: (state, action) =>{
