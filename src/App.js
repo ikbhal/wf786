@@ -48,6 +48,14 @@ function Node({nodeId, parentId,addToPath}) {
   //   return n2.children;
   // });
   // debugger;
+  if(snode == null){
+    console.error("snode is null at node component");
+    debugger;
+    // return (
+    //   <div>Error rendering Node compo</div>
+      
+    // );
+  }
   var children = snode.children;
 
   const addToPathInternal = () =>{
