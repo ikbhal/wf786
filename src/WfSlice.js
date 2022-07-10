@@ -60,26 +60,6 @@ export const wfSlice = createSlice({
     pathNodeClick:(state, pathNode) =>{
         console.log("path node clock pathNode:", pathNode);
     },
-    // delete node working , might not work with duplicate nodes = [... state.nodes]
-    // need differnet implementation
-    // deleteNode: (state, action) =>{
-    //     console.log("delete node " , action);
-    //     var nodes = [...state.nodes];
-    //     var fnodes = nodes.filter(n => n.id !=action.payload);
-        
-    //     console.log("nodes:",nodes);
-    //     console.log("fnodes:", fnodes);
-    //     for(var i=0;i<fnodes.length;i++){
-    //         var fn = fnodes[i];
-    //         var fnchildren = fn.children;
-    //         var fnci = fnchildren.findIndex(n=>n.id ==action.payload);
-    //         if(fnci !=-1){
-    //             fn.children = fnchildren.filter(n=> n.id !=action.payload);
-    //         }
-    //     }
-    //     state.nodes = fnodes;
-
-    // },
     deleteNode: (state, action) =>{
         console.log("delete node " , action);
         var deleteNodeId = action.payload;
@@ -89,7 +69,6 @@ export const wfSlice = createSlice({
         state.nodes.splice(deletedNodeIndex, 1)
 
         // delete node in parent nodes
-        // var nodes = [...state.nodes];
         state.nodes.forEach(n => {
             var ci = n.children.findIndex(c=>c.id ==deleteNodeId);
             if(ci !=-1){
@@ -104,7 +83,6 @@ export const wfSlice = createSlice({
         var parentId = action.payload.parentId;
         console.log("siblingId:", siblingId, ", parentId:", parentId);
         // duplicate state node
-        // var nodes = [...state.nodes];
         var pnode = state.nodes.find(n=> n.id == parentId);
         var snode = state.nodes.find(n=> n.id == siblingId);
         // increment nodeidlast
@@ -131,12 +109,7 @@ export const wfSlice = createSlice({
         // debugger;
         var pnode = action.payload;
         console.log(" pnode:", pnode);
-
-        //duplicate nodes 
-        // var nodes = [...state.nodes];
-        console.log("duplicat nodes:", nodes);
         var node = state.nodes.find(n=>n.id ==pnode.id);
-
         // increament node id last
         state.nodeIdLast++;
         var newChild =  {
@@ -144,24 +117,18 @@ export const wfSlice = createSlice({
             text: "n"+state.nodeIdLast,
             editing:false, 
             children: []};
-
         console.log("newChild:", newChild);
-        
         node.children.push(newChild);
         console.log("child added to parent node:", node," newChild:", newChild);
         // add child to nodes
         state.nodes.push(newChild);
         // reset node states
-        // state.nodes = nodes;
-        // console.log("nodes:", nodes);
         console.log("state.nodes", state.nodes);
     },
     toggleNodeChildren: (state, action) => {
         console.log("toggle node children action:", action);
-        // var nodes = [...state.nodes];
         var snode = state.nodes.find(n => n.id ==action.payload);
         snode.closed =! snode.closed;
-        // state.nodes = nodes;
     },
     incrNodeIdLast: (state) => {
         console.log("increment node id last");
@@ -189,14 +156,8 @@ export const wfSlice = createSlice({
         console.log("set node text action:", action);
         var id = action.payload.id;
         var text = action.payload.text;
-        // console.log("id:", id , ",text:", text);
-        // var nodes = [...state.nodes];
         var ni = state.nodes.findIndex(n => n.id == id);
-        // console.log("ni:", ni);
         state.nodes[ni].text =text;
-        // console.log("nodes ", nodes);
-        // state.nodes = nodes;
-        console.log("state nodes:", state.nodes);
     },
     clearPathNodes: (state) =>{
         console.log("inside clearPathNodes");
@@ -239,7 +200,7 @@ function searchFromRootNodeHelper(node, text, path, pathArray){
     console.log("inside searchNodesHelper nodes:", node,
      ", text:", text, ", path:", path, ", pathArray:", pathArray);
     if (node ){
-        path.push(node);
+        path.push(node.id);
         if(node.text && node.text.includes(text)){
             pathArray.push([...path]);
         }
