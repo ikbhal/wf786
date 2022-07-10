@@ -62,23 +62,40 @@ export const wfSlice = createSlice({
     },
     // delete node working , might not work with duplicate nodes = [... state.nodes]
     // need differnet implementation
+    // deleteNode: (state, action) =>{
+    //     console.log("delete node " , action);
+    //     var nodes = [...state.nodes];
+    //     var fnodes = nodes.filter(n => n.id !=action.payload);
+        
+    //     console.log("nodes:",nodes);
+    //     console.log("fnodes:", fnodes);
+    //     for(var i=0;i<fnodes.length;i++){
+    //         var fn = fnodes[i];
+    //         var fnchildren = fn.children;
+    //         var fnci = fnchildren.findIndex(n=>n.id ==action.payload);
+    //         if(fnci !=-1){
+    //             fn.children = fnchildren.filter(n=> n.id !=action.payload);
+    //         }
+    //     }
+    //     state.nodes = fnodes;
+
+    // },
     deleteNode: (state, action) =>{
         console.log("delete node " , action);
-        var nodes = [...state.nodes];
-        var fnodes = nodes.filter(n => n.id !=action.payload);
-        
-        console.log("nodes:",nodes);
-        console.log("fnodes:", fnodes);
-        for(var i=0;i<fnodes.length;i++){
-            var fn = fnodes[i];
-            var fnchildren = fn.children;
-            var fnci = fnchildren.findIndex(n=>n.id ==action.payload);
-            if(fnci !=-1){
-                fn.children = fnchildren.filter(n=> n.id !=action.payload);
-            }
-        }
-        state.nodes = fnodes;
+        var deleteNodeId = action.payload;
+        // delete node in nodes array
+        var deletedNodeIndex = state.nodes.findIndex(n=> n.id == deleteNodeId);
+        var deletedNode = state.nodes[deletedNodeIndex];
+        state.nodes.splice(deletedNodeIndex, 1)
 
+        // delete node in parent nodes
+        // var nodes = [...state.nodes];
+        state.nodes.forEach(n => {
+            var ci = n.children.findIndex(c=>c.id ==deleteNodeId);
+            if(ci !=-1){
+                n.children.splice(ci,1);
+            }
+        });
     },
     addNextSibling : (state, action) =>{
         console.log("add next sibling action:", action);
