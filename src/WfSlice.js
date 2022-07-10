@@ -150,12 +150,12 @@ export const wfSlice = createSlice({
         var ni = state.nodes.findIndex(n => n.id == id);
         state.nodes[ni].text =text;
     },
-    clearpathNodeIds: (state) =>{
-        console.log("inside clearpathNodeIds");
+    clearPathNodeIds: (state) =>{
+        console.log("inside clearPathNodeIds");
         state.pathNodeIds = [];
     },
-    addPathTopathNodeIds: (state, action) => {
-        console.log("inside addPathTopathNodeIds action:", action);
+    addPathToPathNodeIds: (state, action) => {
+        console.log("inside addPathToPathNodeIds action:", action);
         var nodeId = action.payload;
         // var node = state.nodes.find(n=> n.id ==action.payload);
         state.pathNodeIds.push(nodeId);
@@ -212,7 +212,7 @@ export const { zoomIn, pathNodeClick,
     addChildAtEnd,toggleNodeChildren,
     incrNodeIdLast,addNodeToNodes,
     setEditNode,setNodeText,
-    clearpathNodeIds,addPathTopathNodeIds,
+    clearPathNodeIds,addPathToPathNodeIds,
     searchNodes } = wfSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
