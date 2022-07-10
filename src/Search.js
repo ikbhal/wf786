@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setNodeText, searchNodes, zoomIn } from './WfSlice';
+import { PathSectionWithNodes } from './Path';
 
 
 export function Search() {
@@ -41,13 +42,20 @@ export function SearchResult() {
 
     return (
         <div className="search-result">
-            Search Result;
             {searchResult.length > 0 && 
-                searchResult.map((node, index) =>
-                    <SearchResultItem key={index} node={node}/>
+                searchResult.map((pathNodes, index) =>
+                    // <SearchResultItem key={index} node={node}/>
+                    <SearchResultItemWithPath key={index} pathNodes={pathNodes}/>
                 )
             }
         </div>
+    );
+}
+
+export function SearchResultItemWithPath({pathNodes}){
+    var dispatch = useDispatch();
+    return (
+       <PathSectionWithNodes pathNodes={pathNodes} />
     );
 }
 

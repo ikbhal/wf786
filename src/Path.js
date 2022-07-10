@@ -15,6 +15,16 @@ export function PathSection() {
     );
 };
 
+export function PathSectionWithNodes({pathNodes}) {
+    return (
+        <div>
+            {pathNodes.length>0 && 
+                pathNodes.map((node, index)=><PathPart key={index} node={node}/>)
+            }
+        </div>
+    );
+}
+
 export function PathPart({node}){
     var dispatch =useDispatch();
     return(

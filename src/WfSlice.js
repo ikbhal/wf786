@@ -195,9 +195,13 @@ export const wfSlice = createSlice({
         console.log("text:", text);
         // set search text
         state.searchText = text;
-        var result = searchNodesHelper(state.nodes, text);
-        console.log("result:", result);
-        state.searchResult = result;
+        // var result = searchNodesHelper(state.nodes, text);
+        var pathArray = [];
+        var pathPart = null;
+        var path = [];
+        searchFromRootNodeHelper(state.startNode, text, path, pathArray);
+        console.log("pathArray:", pathArray);
+        state.searchResult = pathArray;
     }
   },
 });
@@ -206,6 +210,23 @@ function searchNodesHelper(nodes, text){
     console.log("inside searchNodesHelper nodes:", nodes, ", text:", text);
     var result = nodes.filter(n => n.text.includes(text));
     return result;
+}
+
+function searchFromRootNodeHelper(node, text, path, pathArray){
+    console.log("inside searchNodesHelper nodes:", node,
+     ", text:", text, ", path:", path, ", pathArray:", pathArray);
+    if (node ){
+        path.push(node);
+        if(node.text && node.text.includes(text)){
+            pathArray.push([...path]);
+        }
+        node.children.forEach((child, index) => {
+            searchFromRootNodeHelper(child, text, path, pathArray);
+            path.pop();
+        });
+    }else {
+        pathArray.push(path);
+    }
 }
 
 export const { zoomIn, pathNodeClick,
