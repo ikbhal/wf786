@@ -7,7 +7,9 @@ let startNode = null;
 let zoomNode = null;
 // let newZoomNode = null;
 // let zoomParentNode = null;
-let pathNodes = [];
+// let pathNodes = [];
+let pathNodeIndices = [];
+pathNodeIndices.push(0);
 
 let n2 = {id: 2, text: "n2", closed: true, editing:false, children: []};
 let n3 = {id: 3, text: "n3", closed: true, editing:false, children: []};
@@ -24,7 +26,7 @@ startNode= n1;
 //set zoom node 
 zoomNode = startNode;
 //add startnode to path nodes;
-pathNodes.push(startNode);
+// pathNodes.push(startNode);
 
 
 export const wfSlice = createSlice({
@@ -33,8 +35,8 @@ export const wfSlice = createSlice({
     startNodeIndex: 0,
     nodes: nodes,
     zoomNodeIndex: 0,
-    zoomParentNode : null,
-    pathNodes: pathNodes,
+    zoomParentNodeIndex : -1,
+    pathNodeIndices: pathNodeIndices,
     nodeIdLast: nodeIdLast,
     searchText: "",
     searchResult: []
@@ -47,14 +49,15 @@ export const wfSlice = createSlice({
         var node = state.nodes.find(n => n.id ==id);
         console.log("node:", node);
         // remove path parts after action.pyalod
-        var pi = state.pathNodes.findIndex(n=> n.id == id);
+        // var pi = state.pathNodes.findIndex(n=> n.id == id);
+        var pi = state.pathNodeIndices.findIndex(pid => id==pid);
         var pathNodes = state.pathNodes.slice(0, pi+1);
         state.pathNodes =pathNodes;
         // set zoom node to id 
-        state.zoomNode = node;
+        state.zoomNodeIndex = pi;
         // set zoom parent node 
-        var zoomParentNode = pi>0?state.pathNodes[pi-1]: null;
-        state.zoomParentNode = zoomParentNode;
+        var zoomParentNodeIndex = pi>0?state.pathNodes[pi-1]: -1;
+        state.zoomParentNode = zoomParentNodeIndex;
         
     },
     pathNodeClick:(state, pathNode) =>{
