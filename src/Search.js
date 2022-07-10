@@ -43,19 +43,18 @@ export function SearchResult() {
     return (
         <div className="search-result">
             {searchResult.length > 0 && 
-                searchResult.map((pathNodes, index) =>
-                    // <SearchResultItem key={index} node={node}/>
-                    <SearchResultItemWithPath key={index} pathNodes={pathNodes}/>
+                searchResult.map((pathNodeIndices, index) =>
+                    <SearchResultItemWithPath key={index} pathNodeIndices={pathNodeIndices}/>
                 )
             }
         </div>
     );
 }
 
-export function SearchResultItemWithPath({pathNodes}){
+export function SearchResultItemWithPath({pathNodeIndices}){
     var dispatch = useDispatch();
     return (
-       <PathSectionWithNodes pathNodes={pathNodes} />
+       <PathSectionWithNodes pathNodeIndices={pathNodeIndices} />
     );
 }
 
