@@ -30,9 +30,9 @@ pathNodes.push(startNode);
 export const wfSlice = createSlice({
   name: 'wf',
   initialState: {
-    startNode: startNode,
+    startNodeIndex: 0,
     nodes: nodes,
-    zoomNode: startNode,
+    zoomNodeIndex: 0,
     zoomParentNode : null,
     pathNodes: pathNodes,
     nodeIdLast: nodeIdLast,
@@ -220,7 +220,8 @@ export const wfSlice = createSlice({
         var pathArray = [];
         var pathPart = null;
         var path = [];
-        searchFromRootNodeHelper(state.startNode, text, path, pathArray);
+        var node = state.nodes[state.startNodeIndex];
+        searchFromRootNodeHelper(node, text, path, pathArray);
         console.log("pathArray:", pathArray);
         state.searchResult = pathArray;
     }
@@ -234,6 +235,7 @@ function searchNodesHelper(nodes, text){
 }
 
 function searchFromRootNodeHelper(node, text, path, pathArray){
+    
     console.log("inside searchNodesHelper nodes:", node,
      ", text:", text, ", path:", path, ", pathArray:", pathArray);
     if (node ){
@@ -272,8 +274,14 @@ export const { zoomIn, pathNodeClick,
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 export const selectNodes = (state) => state.wf.nodes;
-export const selectStartNode = (state) => state.wf.startNode;
-export const selectZoomNode =(state) => state.wf.zoomNode;
+export const selectStartNode = (state) => {
+    var node = state.wf.nodes[state.wf.startNodeIndex];
+    return node;
+};
+export const selectZoomNode =(state) => {
+    var node = state.wf.nodes[state.wf.zoomNodeIndex];
+    return node;
+}
 export const selectPathNodes = (state) => state.wf.pathNodes;
 export const selectNodeIdLast = (state) => state.wf.nodeIdLast;
 
