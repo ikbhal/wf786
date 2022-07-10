@@ -1,13 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
-// import { trackForMutations } from '@reduxjs/toolkit/dist/immutableStateInvariantMiddleware';
 
 let nodes = [];
 let nodeIdLast = 4;
 let startNode = null;
 let zoomNode = null;
-// let newZoomNode = null;
-// let zoomParentNode = null;
-// let pathNodes = [];
 let pathNodeIndices = [];
 pathNodeIndices.push(0);
 
@@ -20,14 +16,6 @@ nodes.push(n1);
 nodes.push(n2);
 nodes.push(n3);
 nodes.push(n4);
-
-//console.log("nodes:",nodes);
-startNode= n1;
-//set zoom node 
-zoomNode = startNode;
-//add startnode to path nodes;
-// pathNodes.push(startNode);
-
 
 export const wfSlice = createSlice({
   name: 'wf',
@@ -51,13 +39,13 @@ export const wfSlice = createSlice({
         // remove path parts after action.pyalod
         // var pi = state.pathNodes.findIndex(n=> n.id == id);
         var pi = state.pathNodeIndices.findIndex(pid => id==pid);
-        var pathNodes = state.pathNodes.slice(0, pi+1);
-        state.pathNodes =pathNodes;
+        var pathNodeIndices = state.pathNodeIndices.slice(0, pi+1);
+        state.pathNodeIndices =pathNodeIndices;
         // set zoom node to id 
         state.zoomNodeIndex = pi;
         // set zoom parent node 
-        var zoomParentNodeIndex = pi>0?state.pathNodes[pi-1]: -1;
-        state.zoomParentNode = zoomParentNodeIndex;
+        var zoomParentNodeIndex = pi>0?state.pathNodeIndices[pi-1]: -1;
+        state.zoomParentNodeIndex = zoomParentNodeIndex;
         
     },
     pathNodeClick:(state, pathNode) =>{
@@ -162,14 +150,15 @@ export const wfSlice = createSlice({
         var ni = state.nodes.findIndex(n => n.id == id);
         state.nodes[ni].text =text;
     },
-    clearPathNodes: (state) =>{
-        console.log("inside clearPathNodes");
-        state.pathNodes = [];
+    clearPathNodeIndices: (state) =>{
+        console.log("inside clearPathNodeIndices");
+        state.pathNodeIndices = [];
     },
-    addPathToPathNodes: (state, action) => {
-        console.log("inside addPathToPathNodes action:", action);
-        var node = state.nodes.find(n=> n.id ==action.payload);
-        state.pathNodes.push(node);
+    addPathToPathNodeIndices: (state, action) => {
+        console.log("inside addPathToPathNodeIndices action:", action);
+        var nodeId = action.payload;
+        // var node = state.nodes.find(n=> n.id ==action.payload);
+        state.pathNodeIndices.push(nodeId);
     },
     searchNodes: (state, action) =>{
         console.log("inside search action:", action);
@@ -221,7 +210,7 @@ export const { zoomIn, pathNodeClick,
     addChildAtEnd,toggleNodeChildren,
     incrNodeIdLast,addNodeToNodes,
     setEditNode,setNodeText,
-    clearPathNodes,addPathToPathNodes,
+    clearPathNodeIndices,addPathToPathNodeIndices,
     searchNodes } = wfSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It

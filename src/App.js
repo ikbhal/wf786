@@ -10,8 +10,8 @@ import {
   deleteNode,
   addNextSibling,
   zoomIn,
-  addPathToPathNodes,
-  clearPathNodes
+  addPathToPathNodeIndices,
+  clearPathNodeIndices
 } from './WfSlice';
 import './App.css';
 
@@ -30,7 +30,7 @@ function App() {
         <Search/>
         <PathSection/>
         <Node node={zoomNode} parentId={zoomParentNode} 
-          addToPath={e=> dispatch(clearPathNodes())}/>
+          addToPath={e=> dispatch(clearPathNodeIndices())}/>
       </div>
   );
 }
@@ -50,7 +50,7 @@ function Node({node, parentId,addToPath}) {
   const addToPathInternal = () =>{
     addToPath();
     // clearPathNodes
-    dispatch(addPathToPathNodes(node.id));
+    dispatch(addPathToPathNodeIndices(node.id));
   };
 
   var childNodes = children.map((child, index) => 

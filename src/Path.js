@@ -4,37 +4,38 @@ import { useSelector, useDispatch } from 'react-redux';
 import { zoomIn } from './WfSlice';
 
 export function PathSection() {
-    const pathNodes = useSelector(state => state.wf.pathNodes);
+    const pathNodeIndices = useSelector(state => state.wf.pathNodeIndices);
     return (
         <div>
             <p>Path</p>
-            {pathNodes.length>0 && 
-                pathNodes.map((node, index)=><PathPart key={index} node={node}/>)
+            {pathNodeIndices.length>0 && 
+                pathNodeIndices.map((nodeId, index)=><PathPart key={index} nodeId={nodeId}/>)
             }
         </div>
     );
 };
 
-export function PathSectionWithNodes({pathNodes}) {
+export function PathSectionWithNodes({pathNodeIndices}) {
     return (
         <div>
-            {pathNodes.length>0 && 
-                pathNodes.map((node, index)=><PathPart key={index} node={node}/>)
+            {pathNodeIndices.length>0 && 
+                pathNodeIndices.map((nodeId, index)=><PathPart key={index} nodeId={nodeId}/>)
             }
         </div>
     );
 }
 
-export function PathPart({node}){
+export function PathPart({nodeId}){
     var dispatch =useDispatch();
+    var node = useSelector(state => state.wf.nodes.find(n => n.id == nodeId));
     return(
         <>
-        <span className="path-part"
-            onClick={e=> dispatch(zoomIn(node.id))}
-            >
-            {node.text}
-        </span>
-        <span> > </span>
+            <span className="path-part"
+                onClick={e=> dispatch(zoomIn(nodeId))}
+                >
+                {node && node.text}
+            </span>
+            <span> > </span>
         </>
     );
 }
