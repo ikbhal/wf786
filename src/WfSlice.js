@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+// import { trackForMutations } from '@reduxjs/toolkit/dist/immutableStateInvariantMiddleware';
 
 let nodes = [];
 let nodeIdLast = 4;
@@ -34,7 +35,9 @@ export const wfSlice = createSlice({
     zoomNode: startNode,
     zoomParentNode : null,
     pathNodes: pathNodes,
-    nodeIdLast: nodeIdLast
+    nodeIdLast: nodeIdLast,
+    searchText: "",
+    searchResult: []
   },
   reducers: {
     zoomIn: (state, action) => {
@@ -183,18 +186,35 @@ export const wfSlice = createSlice({
         var node = state.nodes.find(n=> n.id ==action.payload);
         state.pathNodes.push(node);
     },
-    search: (state, action) =>{
-        console.log("inside search");
+    searchNodes: (state, action) =>{
+        console.log("inside search action:", action);
+        var text = action.payload;
+        if(text == null || text==""){
+            return ;
+        }
+        console.log("text:", text);
+        // set search text
+        state.searchText = text;
+        var result = searchNodesHelper(state.nodes, text);
+        console.log("result:", result);
+        state.searchResult = result;
     }
   },
 });
+
+function searchNodesHelper(nodes, text){
+    console.log("inside searchNodesHelper nodes:", nodes, ", text:", text);
+    var result = nodes.filter(n => n.text.includes(text));
+    return result;
+}
 
 export const { zoomIn, pathNodeClick,
     deleteNode,addNextSibling,
     addChildAtEnd,toggleNodeChildren,
     incrNodeIdLast,addNodeToNodes,
     setEditNode,setNodeText,
-    clearPathNodes,addPathToPathNodes } = wfSlice.actions;
+    clearPathNodes,addPathToPathNodes,
+    searchNodes } = wfSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This
