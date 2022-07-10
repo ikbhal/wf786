@@ -109,13 +109,14 @@ export const wfSlice = createSlice({
     },
     addChildAtEnd: (state, action) =>{
         console.log('add child at end for action :', action);
+        // debugger;
         var pnode = action.payload;
         console.log(" pnode:", pnode);
 
         //duplicate nodes 
-        var nodes = [...state.nodes];
+        // var nodes = [...state.nodes];
         console.log("duplicat nodes:", nodes);
-        var node = nodes.find(n=>n.id ==pnode.id);
+        var node = state.nodes.find(n=>n.id ==pnode.id);
 
         // increament node id last
         state.nodeIdLast++;
@@ -128,19 +129,20 @@ export const wfSlice = createSlice({
         console.log("newChild:", newChild);
         
         node.children.push(newChild);
+        console.log("child added to parent node:", node," newChild:", newChild);
         // add child to nodes
-        nodes.push(newChild);
+        state.nodes.push(newChild);
         // reset node states
-        state.nodes = nodes;
-        console.log("nodes:", nodes);
+        // state.nodes = nodes;
+        // console.log("nodes:", nodes);
         console.log("state.nodes", state.nodes);
     },
     toggleNodeChildren: (state, action) => {
         console.log("toggle node children action:", action);
-        var nodes = [...state.nodes];
-        var snode = nodes.find(n => n.id ==action.payload);
+        // var nodes = [...state.nodes];
+        var snode = state.nodes.find(n => n.id ==action.payload);
         snode.closed =! snode.closed;
-        state.nodes = nodes;
+        // state.nodes = nodes;
     },
     incrNodeIdLast: (state) => {
         console.log("increment node id last");
