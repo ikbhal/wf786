@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 let nodes = [];
 let nodeIdLast = 4;
 let pathNodeIds = [];
-pathNodeIds.push(0);
+pathNodeIds.push(1);
 
 let n2 = {id: 2, text: "n2", closed: true, editing:false, children: []};
 let n3 = {id: 3, text: "n3", closed: true, editing:false, children: []};
