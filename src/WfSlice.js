@@ -25,7 +25,8 @@ export const wfSlice = createSlice({
     pathNodeIds: pathNodeIds,
     nodeIdLast: nodeIdLast,
     searchText: "",
-    searchResult: []
+    searchResult: [],
+    saveJson : ""
   },
   reducers: {
     zoomIn: (state, action) => {
@@ -177,6 +178,12 @@ export const wfSlice = createSlice({
         searchFromRootNodeHelper(state.nodes, state.startNodeId, text, path, pathArray);
         console.log("pathArray:", pathArray);
         state.searchResult = pathArray;
+    }
+    ,saveJson:(sate, action ) => {
+        console.log("will implement");
+    },
+    loadJson:(state,action)=>{
+        console.log("yet to implement");
     }
   },
 });
