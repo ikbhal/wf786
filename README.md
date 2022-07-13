@@ -1,9 +1,9 @@
 # wf786
 workflowy.com clone attempt 786 reverse drag and drop practice
 
-branch wf771
+branch wf770
 ---
-fix pathNodIds initial value to 1 
+redux connecting with backend 
 ---
-zoomin not working for exiting things first child of root node
---
+backend code repoo
+https://github.com/ikbhal/wfs786

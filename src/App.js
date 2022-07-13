@@ -14,6 +14,7 @@ import './App.css';
 
 import {PathSection} from './Path';
 import {Search} from './Search';
+import {SaveWf, LoadWf} from './SaveLoad';
 
 function App() {
   // var zoomNode = useSelector(selectZoomNode);
@@ -26,6 +27,7 @@ function App() {
   return (
       <div className="App">
         <h1>Workflowy</h1>
+        <SaveWf/> <LoadWf/>
         <Search/>
         <PathSection/>
         <Node nodeId={zoomNodeId} parentId={zoomParentNodeId} 
