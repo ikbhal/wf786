@@ -27,7 +27,7 @@ export function PathSectionWithNodes({pathNodeIds}) {
 
 export function PathPart({nodeId}){
     var dispatch =useDispatch();
-    var node = useSelector(state => state.wf.nodes.find(n => n.id == nodeId));
+    var node = useSelector(state => state.wf && state.wf.nodes && state.wf.nodes.find(n => n.id == nodeId));
     return(
         <>
             <span className="path-part"

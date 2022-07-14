@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
 
 let nodes = [];
 let nodeIdLast = 4;
@@ -179,11 +180,28 @@ export const wfSlice = createSlice({
         console.log("pathArray:", pathArray);
         state.searchResult = pathArray;
     }
-    ,saveJson:(sate, action ) => {
+    ,save:(sate, action ) => {
         console.log("will implement");
+        axios.get('http://localhost:3001').then( (response) =>{
+            console.log("response from server is ", response);
+        });
+        // axios.post("http://localhost:3001", 
+        //     {});
     },
-    loadJson:(state,action)=>{
-        console.log("yet to implement");
+    load:(state,action)=>{
+        console.log("load from server action",action);
+        var newState = action.payload;
+        state.nodes= newState.nodes;
+        state.startNodeId = newState.startNodeId;
+        state.pathNodeIds = [state.startNodeId];
+        state.nodeIdLast = newState.nodeIdLast;
+        state.zoomNodeId = [state.startNodeId]
+        state.zoomParentNodeId = -1 ;//invalid id
+        state.searchText = "";
+        state.searchResult = [];
+
+        console.log("update state to ", state);
+        
     }
   },
 });
@@ -220,7 +238,7 @@ export const { zoomIn, pathNodeClick,
     incrNodeIdLast,addNodeToNodes,
     setEditNode,setNodeText,
     clearPathNodeIds,addPathToPathNodeIds,
-    searchNodes } = wfSlice.actions;
+    searchNodes, save, load } = wfSlice.actions;
 
 // The function below is called a thunk and allows us to perform async logic. It
 // can be dispatched like a regular action: `dispatch(incrementAsync(10))`. This

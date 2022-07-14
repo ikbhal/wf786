@@ -31,7 +31,10 @@ function App() {
         <Search/>
         <PathSection/>
         <Node nodeId={zoomNodeId} parentId={zoomParentNodeId} 
-          addToPath={e=> dispatch(clearPathNodeIds())}/>
+          addToPath={
+            e=> dispatch(clearPathNodeIds())
+            
+            }/>
       </div>
   );
 }
@@ -44,7 +47,7 @@ function Node({nodeId, parentId,addToPath}) {
   //   return n2;
   // });
   // var snode = useSelector(selectNodeById(nodeId));
-  var snode = useSelector(state => state.wf.nodes.find(n=>n.id ==nodeId));
+  var snode = useSelector(state => state.wf && state.wf.nodes && state.wf.nodes.find(n=>n.id ==nodeId));
   // var children = useSelector(state =>{ 
   //   var n2 = state.wf.nodes.find(n => n.id == nodeId);
   //   return n2.children;
@@ -52,13 +55,13 @@ function Node({nodeId, parentId,addToPath}) {
   // debugger;
   if(snode == null){
     console.error("snode is null at node component");
-    debugger;
+    // debugger;
     // return (
     //   <div>Error rendering Node compo</div>
       
     // );
   }
-  var children = snode.children;
+  var children = snode && snode.children? snode.children: [];
 
   const addToPathInternal = () =>{
     addToPath();
@@ -76,7 +79,7 @@ function Node({nodeId, parentId,addToPath}) {
   );
 
   var [isEdit, setEdit] = useState(false);
-  var [text, setText] = useState(snode.text);
+  var [text, setText] = useState(snode?snode.text:"");
   return (
     <>
     {snode &&
