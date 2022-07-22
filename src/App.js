@@ -61,7 +61,7 @@ function Node({nodeId, parentId,addToPath}) {
       
     // );
   }
-  var children = snode && snode.children? snode.children: [];
+  var childrenIds = snode && snode.childrenIds? snode.childrenIds.split(","): [];
 
   const addToPathInternal = () =>{
     addToPath();
@@ -69,7 +69,7 @@ function Node({nodeId, parentId,addToPath}) {
     dispatch(addPathToPathNodeIds(nodeId));
   };
 
-  var childNodes = children.map((childId, index) => 
+  var childNodes = childrenIds.map((childId, index) => 
     <Node 
       key={index} 
       nodeId={childId}
