@@ -20,7 +20,6 @@ import {SaveWf, LoadWf} from './SaveLoad';
 function App() {
   // var zoomNode = useSelector(selectZoomNode);
   var zoomNodeId = useSelector(selectZoomNodeId);
-  // debugger;
   var zoomParentNodeId = useSelector(state => state.wf.zoomParentNodeId);
   console.log("zooom node id:", zoomNodeId);
   var dispatch = useDispatch();
@@ -55,10 +54,8 @@ function Node({nodeId, parentId,addToPath}) {
   //   var n2 = state.wf.nodes.find(n => n.id == nodeId);
   //   return n2.children;
   // });
-  // debugger;
   if(snode == null){
     console.error("snode is null at node component");
-    // debugger;
     // return (
     //   <div>Error rendering Node compo</div>
       
@@ -105,7 +102,6 @@ function Node({nodeId, parentId,addToPath}) {
         console.log(res);
         console.log(res.data);
         var child = res.data.child;
-        debugger;
         dispatch(addChildAtEnd({newChildId:child.id, newChildText:childText,  parentNodeId:parentNodeId}));
     });
 
@@ -113,6 +109,7 @@ function Node({nodeId, parentId,addToPath}) {
 
   var [isEdit, setEdit] = useState(false);
   var [text, setText] = useState(snode?snode.text:"");
+  // var childNodeIds = snode ? snode.childNodeIds : "";
   return (
     <>
     {snode &&
@@ -129,10 +126,10 @@ function Node({nodeId, parentId,addToPath}) {
         delete
       </span>
 
+
       <span className="add-child-node"
         
         onClick={e=> {
-           debugger;
           //  var childIndex = parentNode.childrenIds.split(",").length;
           var childIndex = 0;//temp test
            var randNum = Math.trunc(Math.random() * 100 );
@@ -177,7 +174,26 @@ function Node({nodeId, parentId,addToPath}) {
             dispatch(setNodeText({id:nodeId, text:e.target.value}));
           }}
           
-          onBlur={ e => setEdit(false)}
+          onBlur={ e => {
+              setEdit(false);
+              //call backend api 
+              let onlyNodeId = nodeId[0] || nodeId;
+              const payload = {
+                
+                  // "childrenIds": childNodeIds,
+                  "id": onlyNodeId,
+                  "text": text
+              
+              }
+              API.put(`nodes/text`, payload).then(res => {
+                console.log("res ",res);
+                console.log("res.data ", res.data);
+
+                dispatch(setNodeText({id:onlyNodeId, text:res.data.text}))
+
+              })
+            }
+          }
         />
       </span>
       }
