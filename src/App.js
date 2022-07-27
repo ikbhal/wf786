@@ -10,6 +10,7 @@ import {
   clearPathNodeIds,
   selectZoomNodeId
 } from './WfSlice';
+import API from './api'
 import './App.css';
 
 import {PathSection} from './Path';
@@ -48,6 +49,8 @@ function Node({nodeId, parentId,addToPath}) {
   // });
   // var snode = useSelector(selectNodeById(nodeId));
   var snode = useSelector(state => state.wf && state.wf.nodes && state.wf.nodes.find(n=>n.id ==nodeId));
+
+  var parentNode = useSelector(state => state.wf.nodes.find(n=>n.id ==parentId));
   // var children = useSelector(state =>{ 
   //   var n2 = state.wf.nodes.find(n => n.id == nodeId);
   //   return n2.children;
@@ -78,6 +81,36 @@ function Node({nodeId, parentId,addToPath}) {
       />
   );
 
+
+  // addChildHandler(childText, childIndex, currentNodeId);
+  var addChildHandler = (childText, childIndex, parentNodeId) => {
+    console.log("inside addchild handler");
+
+    // var randNum = Math.trunc(Math.random() * 100 );
+    // var childText = "new node " + randNum;
+
+    // debugger;
+    
+
+    const payload  =
+    {
+        childText: childText,
+        parentNodeId : parentNodeId, // later
+        // childIndex: parentNode.childrenIds.split(",").length // if not working try with 0
+        childIndex: childIndex
+    }
+
+    API.post(`nodes/child`, payload) // if it working try with await
+    .then(res => {
+        console.log(res);
+        console.log(res.data);
+        var child = res.data.child;
+        debugger;
+        dispatch(addChildAtEnd({newChildId:child.id, newChildText:childText,  parentNodeId:parentNodeId}));
+    });
+
+  }
+
   var [isEdit, setEdit] = useState(false);
   var [text, setText] = useState(snode?snode.text:"");
   return (
@@ -97,7 +130,17 @@ function Node({nodeId, parentId,addToPath}) {
       </span>
 
       <span className="add-child-node"
-        onClick={e=>dispatch(addChildAtEnd(nodeId))}
+        
+        onClick={e=> {
+           debugger;
+          //  var childIndex = parentNode.childrenIds.split(",").length;
+          var childIndex = 0;//temp test
+           var randNum = Math.trunc(Math.random() * 100 );
+           var childText = "new node " + randNum;
+           var currentNodeId = nodeId[0];// todo fix is needed at nodeId level
+           addChildHandler(childText, childIndex, currentNodeId);
+
+        }}
       >
         addchild
       </span>

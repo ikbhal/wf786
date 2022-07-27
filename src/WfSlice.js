@@ -1,5 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
+import store from './store'
 import axios from 'axios'
+import API from './api'
+
 
 let nodes = [];
 let nodeIdLast = 4;
@@ -98,25 +101,33 @@ export const wfSlice = createSlice({
     },
     addChildAtEnd: (state, action) =>{
         console.log('add child at end for action :', action);
-        // debugger;
-        var pnodeId = action.payload;
-        console.log(" pnodeId:", pnodeId);
-        var node = state.nodes.find(n=>n.id ==pnodeId);
+        debugger;
+        var {newChildId, newChildText, parentNodeId} = action.payload;
+        console.log(" parentNodeId:", parentNodeId);
+        var node = state.nodes.find(n=>n.id ==parentNodeId);
         // increament node id last
         state.nodeIdLast++;
-        var newChildId = state.nodeIdLast;
         var newChild =  {
             id: newChildId,
-            text: "n"+state.nodeIdLast,
+            text: newChildText,
             editing:false, 
-            children: []};
+            children: []
+        };
         console.log("newChild:", newChild);
-        node.children.push(newChildId);
+
         console.log("child added to parent node:", node," newChild:", newChild);
         // add child to nodes
         state.nodes.push(newChild);
         // reset node states
         console.log("state.nodes", state.nodes);
+
+        var children = node.childrenIds.split(",");
+        // temp work -> need later fix at root cause
+        if(children && children.length > 0 && children[0] == ''){
+            children.splice(0, 1);
+        }
+        children.push(newChildId);
+        node.childrenIds = children.join(",");
     },
     toggleNodeChildren: (state, action) => {
         console.log("toggle node children action:", action);
