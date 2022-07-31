@@ -54,19 +54,22 @@ export const wfSlice = createSlice({
     pathNodeClick:(state, pathNode) =>{
         console.log("path node clock pathNode:", pathNode);
     },
+    // old : // dispatch(deleteNode(nodeId));
+    // new: dispatch(deleteNode({id:nodeId, parentNodeId:parentId}));
     deleteNode: (state, action) =>{
         console.log("delete node " , action);
-        var deleteNodeId = action.payload;
+        // var deleteNodeId = action.payload;
+        var {id, parentNodeId} = action.payload;
         // delete node in nodes array
-        var deletedNodeIndex = state.nodes.findIndex(n=> n.id == deleteNodeId);
-        var deletedNode = state.nodes[deletedNodeIndex];
+        var deletedNodeIndex = state.nodes.findIndex(n=> n.id == id);
+        // var deletedNode = state.nodes[deletedNodeIndex];
         state.nodes.splice(deletedNodeIndex, 1)
 
         // delete node in parent nodes
         state.nodes.forEach(n => {
-            var ci = n.children.findIndex(cid=>cid ==deleteNodeId);
-            if(ci !=-1){
-                n.children.splice(ci,1);
+            let childrenIdsArr = n.childrenIds.split(",");
+            if(childrenIdsArr.indexOf(id) !==-1){
+                n.childrenIds = childrenIdsArr.filter(cid2 => cid2 !=id).join(",")
             }
         });
     },
@@ -101,7 +104,6 @@ export const wfSlice = createSlice({
     },
     addChildAtEnd: (state, action) =>{
         console.log('add child at end for action :', action);
-        debugger;
         var {newChildId, newChildText, parentNodeId} = action.payload;
         console.log(" parentNodeId:", parentNodeId);
         var node = state.nodes.find(n=>n.id ==parentNodeId);

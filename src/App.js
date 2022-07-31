@@ -16,6 +16,7 @@ import './App.css';
 import {PathSection} from './Path';
 import {Search} from './Search';
 import {SaveWf, LoadWf} from './SaveLoad';
+import axios from 'axios';
 
 function App() {
   // var zoomNode = useSelector(selectZoomNode);
@@ -41,19 +42,10 @@ function App() {
 
 function Node({nodeId, parentId,addToPath}) {
   const dispatch = useDispatch();
-
-  // var snode =  useSelector(state =>{ 
-  //   var n2 = state.wf.nodes.find(n => n.id == node.id);
-  //   return n2;
-  // });
-  // var snode = useSelector(selectNodeById(nodeId));
   var snode = useSelector(state => state.wf && state.wf.nodes && state.wf.nodes.find(n=>n.id ==nodeId));
 
   var parentNode = useSelector(state => state.wf.nodes.find(n=>n.id ==parentId));
-  // var children = useSelector(state =>{ 
-  //   var n2 = state.wf.nodes.find(n => n.id == nodeId);
-  //   return n2.children;
-  // });
+
   if(snode == null){
     console.error("snode is null at node component");
     // return (
@@ -78,16 +70,8 @@ function Node({nodeId, parentId,addToPath}) {
       />
   );
 
-
-  // addChildHandler(childText, childIndex, currentNodeId);
   var addChildHandler = (childText, childIndex, parentNodeId) => {
     console.log("inside addchild handler");
-
-    // var randNum = Math.trunc(Math.random() * 100 );
-    // var childText = "new node " + randNum;
-
-    // debugger;
-    
 
     const payload  =
     {
@@ -109,7 +93,6 @@ function Node({nodeId, parentId,addToPath}) {
 
   var [isEdit, setEdit] = useState(false);
   var [text, setText] = useState(snode?snode.text:"");
-  // var childNodeIds = snode ? snode.childNodeIds : "";
   return (
     <>
     {snode &&
@@ -121,7 +104,25 @@ function Node({nodeId, parentId,addToPath}) {
       </span>
 
       <span className="delete-node"
-        onClick ={e => dispatch(deleteNode(nodeId))}
+        onClick ={e => {
+          
+            // dispatch(deleteNode(nodeId));
+            var onlyParentId = parentId[0] || parentId;
+            const payload = 
+            {
+                "nodeId": nodeId,//nodeId
+                "parentId": onlyParentId,//parentId
+                "deleteType": "delete" 
+            };
+
+            API.delete(`nodes`, {data:payload})
+            .then(res => {
+              console.log(res);
+              dispatch(deleteNode({id:nodeId, parentNodeId:onlyParentId}));
+            });
+        
+          }
+        }
         >
         delete
       </span>
