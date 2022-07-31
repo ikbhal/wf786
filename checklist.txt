@@ -1,0 +1,14 @@
+Bismillah
+
+$ add node
+$ view node
+$ show node children
+$ close node children
+$ expand node children
+$ edit node text 
+ add sibling
+$load from server first time -> on button click
+load server automtically on web page first time load 
+search for nodes 
+save to server  over all 
+   save to server on add node

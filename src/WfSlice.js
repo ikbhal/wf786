@@ -123,13 +123,7 @@ export const wfSlice = createSlice({
         // reset node states
         console.log("state.nodes", state.nodes);
 
-        var children = node.childrenIds.split(",");
-        // temp work -> need later fix at root cause
-        if(children && children.length > 0 && children[0] == ''){
-            children.splice(0, 1);
-        }
-        children.push(newChildId);
-        node.childrenIds = children.join(",");
+        node.children.push(newChildId);
     },
     toggleNodeChildren: (state, action) => {
         console.log("toggle node children action:", action);
@@ -208,7 +202,7 @@ export const wfSlice = createSlice({
         state.startNodeId = newState.startNodeId;
         state.pathNodeIds = [state.startNodeId];
         state.nodeIdLast = newState.nodeIdLast;
-        state.zoomNodeId = [state.startNodeId]
+        state.zoomNodeId = state.startNodeId;
         state.zoomParentNodeId = -1 ;//invalid id
         state.searchText = "";
         state.searchResult = [];
@@ -276,7 +270,10 @@ export const selectZoomNode =(state) => {
     return node;
 }
 
-export const selectZoomNodeId =(state) => state.wf.zoomNodeId;
+export const selectZoomNodeId =(state) => {
+    // debugger;
+    return    state.wf.zoomNodeId;
+}
 export const selectPathNodes = (state) => state.wf.pathNodes;
 export const selectNodeIdLast = (state) => state.wf.nodeIdLast;
 // export const selectNodeById = (state, nodeId) => state.wf.nodes.find(node =>node.id == nodeId);

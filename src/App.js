@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   setNodeText,
@@ -8,7 +8,8 @@ import {
   addNextSibling,
   addPathToPathNodeIds,
   clearPathNodeIds,
-  selectZoomNodeId
+  selectZoomNodeId,
+  load
 } from './WfSlice';
 import API from './api'
 import './App.css';
@@ -17,13 +18,34 @@ import {PathSection} from './Path';
 import {Search} from './Search';
 import {SaveWf, LoadWf} from './SaveLoad';
 import axios from 'axios';
+import { TREE_MAN_LOAD_URL } from './urls';
 
 function App() {
+
+  var dispatch = useDispatch();
+
+  useEffect(() => {
+    // Update the document title using the browser API
+    document.title = `treeman`;
+
+    axios.get(TREE_MAN_LOAD_URL)
+    .then((response) => {
+        console.log(response);
+        console.log("response.data is " , response.data);
+        console.log("dispatch from button handler");
+        // dispatch(load(response.data));
+        dispatch(load(response.data));
+        }, (error) => {
+        console.log(error);
+        });
+
+  },[]);
   // var zoomNode = useSelector(selectZoomNode);
   var zoomNodeId = useSelector(selectZoomNodeId);
+  // debugger;
   var zoomParentNodeId = useSelector(state => state.wf.zoomParentNodeId);
   console.log("zooom node id:", zoomNodeId);
-  var dispatch = useDispatch();
+ 
  
   return (
       <div className="App">
@@ -48,20 +70,16 @@ function Node({nodeId, parentId,addToPath}) {
 
   if(snode == null){
     console.error("snode is null at node component");
-    // return (
-    //   <div>Error rendering Node compo</div>
-      
-    // );
   }
-  var childrenIds = snode && snode.childrenIds? snode.childrenIds.split(","): [];
+  // var childrenIds = snode && snode.childrenIds? snode.childrenIds.split(","): [];
 
   const addToPathInternal = () =>{
     addToPath();
     // clearPathNodes
     dispatch(addPathToPathNodeIds(nodeId));
   };
-
-  var childNodes = childrenIds.map((childId, index) => 
+  // debugger;
+  var childNodes = snode == null ? "": snode.children.map((childId, index) => 
     <Node 
       key={index} 
       nodeId={childId}

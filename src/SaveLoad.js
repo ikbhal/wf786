@@ -53,17 +53,6 @@ export function LoadWf(){
     return (
         <button onClick={e=> {
             console.log("load wf clicked");
-             // #old code start
-            // axios.get('http://localhost:3001/load')
-            // .then((response) => {
-            //     console.log(response);
-            //     console.log("response.data is " , response.data);
-            //     console.log("dispatch from button handler");
-            //     dispatch(load(response.data));
-            //     }, (error) => {
-            //     console.log(error);
-            //     });
-            // #old code end
 
             axios.get('http://localhost:81/load')
             .then((response) => {
