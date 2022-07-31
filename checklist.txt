@@ -12,3 +12,10 @@ load server automtically on web page first time load
 search for nodes 
 save to server  over all 
    save to server on add node
+---
+icons for
+    add sibling, 
+    add child,
+     expand , 
+     close ,
+      delete

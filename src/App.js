@@ -150,10 +150,12 @@ function Node({nodeId, parentId,addToPath}) {
         
         onClick={e=> {
           //  var childIndex = parentNode.childrenIds.split(",").length;
+          debugger;
           var childIndex = 0;//temp test
            var randNum = Math.trunc(Math.random() * 100 );
            var childText = "new node " + randNum;
-           var currentNodeId = nodeId[0];// todo fix is needed at nodeId level
+          //  var currentNodeId = nodeId[0];// todo fix is needed at nodeId level
+           var currentNodeId = nodeId;
            addChildHandler(childText, childIndex, currentNodeId);
 
         }}
