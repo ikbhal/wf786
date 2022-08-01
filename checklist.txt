@@ -21,4 +21,5 @@ icons for
       delete
 ---
 bugs
+   zoom is not working
    add sibling not working as expected at new node at diffent node, proabily parent node

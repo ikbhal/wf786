@@ -9,7 +9,8 @@ import {
   addPathToPathNodeIds,
   clearPathNodeIds,
   selectZoomNodeId,
-  load
+  load,
+  zoomIn
 } from './WfSlice';
 import API from './api'
 import './App.css';
@@ -196,8 +197,10 @@ function Node({nodeId, parentId,addToPath}) {
 
       <span className="zoom-node"
         onClick={e => {
+           
           addToPathInternal();
-          // dispatch(zoomIn(node.id));
+          debugger;
+          dispatch(zoomIn(nodeId));
         } }>
         {/* zoomin */}
         <FontAwesomeIcon icon={faMagnifyingGlass}/>

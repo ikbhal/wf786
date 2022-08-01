@@ -45,7 +45,7 @@ export const wfSlice = createSlice({
         var pathNodeIds = state.pathNodeIds.slice(0, pi+1);
         state.pathNodeIds =pathNodeIds;
         // set zoom node to id 
-        state.zoomNodeId = pi;
+        state.zoomNodeId = id;
         // set zoom parent node 
         var zoomParentNodeIndex = pi>0?state.pathNodeIds[pi-1]: -1;
         state.zoomParentNodeIndex = zoomParentNodeIndex;
