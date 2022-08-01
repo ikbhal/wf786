@@ -12,19 +12,19 @@
 
 .toggle-children{
   margin: 5px;
-  background-color: greenyellow;
+  /* background-color: greenyellow; */
 }
 
 .add-child-node{
   margin: 2px;
   width: 10px;
   height: 10px;
-  background-color: greenyellow;
+  /* background-color: greenyellow; */
 }
 
 .delete-node{
   margin: 2px;
-  background-color: greenyellow;
+  /* background-color: greenyellow; */
 }
 .node-text{
   padding: 5px;
@@ -32,7 +32,7 @@
 
 .add-next-sibling-node{
   margin: 2px;
-  background-color: greenyellow;
+  /* background-color: greenyellow; */
 }
 
 .path_section{
@@ -43,5 +43,5 @@
 
 .zoom-node{
   margin: 2px;
-  background-color: greenyellow;
+  /* background-color: greenyellow; */
 }

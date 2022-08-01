@@ -13,6 +13,11 @@ import {
 } from './WfSlice';
 import API from './api'
 import './App.css';
+ 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashCan,  faCirclePlus, faAngleRight, faAngleUp, faMagnifyingGlass, faAdd} from '@fortawesome/free-solid-svg-icons'
+// import { faCirclePlus} from '@fortawesome/free-light-svg-icons'
+//<FontAwesomeIcon icon="fa-thin fa-circle-trash" />
 
 import {PathSection} from './Path';
 import {Search} from './Search';
@@ -48,7 +53,12 @@ function App() {
  
  
   return (
+      
       <div className="App">
+
+      {/* <div> test <FontAwesomeIcon icon="fa-thin fa-circle-trash" /> </div> */}
+      <FontAwesomeIcon icon={faAngleRight} />
+      {/* //<FontAwesomeIcon icon="fa-solid fa-angle-right" /> */}
         <h1>Workflowy</h1>
         <SaveWf/> <LoadWf/>
         <Search/>
@@ -118,7 +128,15 @@ function Node({nodeId, parentId,addToPath}) {
       <span className="toggle-children"
         onClick ={e => dispatch(toggleNodeChildren(nodeId))}
       >
-        {snode.closed?"open":"close"}
+        {snode.closed?
+        
+        <FontAwesomeIcon icon={faAngleRight} />
+        // "open"
+        
+        :
+        <FontAwesomeIcon icon={faAngleUp} />
+        // "close"
+        }
       </span>
 
       <span className="delete-node"
@@ -142,31 +160,38 @@ function Node({nodeId, parentId,addToPath}) {
           }
         }
         >
-        delete
+          {/* <FontAwesomeIcon icon="fa-thin fa-circle-trash" /> */}
+          <FontAwesomeIcon icon={faTrashCan} />
+          {/* delete */}
       </span>
 
 
       <span className="add-child-node"
         
         onClick={e=> {
-          //  var childIndex = parentNode.childrenIds.split(",").length;
-          debugger;
           var childIndex = 0;//temp test
            var randNum = Math.trunc(Math.random() * 100 );
            var childText = "new node " + randNum;
-          //  var currentNodeId = nodeId[0];// todo fix is needed at nodeId level
            var currentNodeId = nodeId;
            addChildHandler(childText, childIndex, currentNodeId);
 
         }}
       >
-        addchild
+        {/* addchild */}
+        <FontAwesomeIcon icon={faCirclePlus} />
       </span>
 
       <span className="add-next-sibling-node"
-        onClick={e=> dispatch(addNextSibling({siblingId:nodeId, parentId:parentId}))}
+        onClick={e=> {
+        
+          dispatch(addNextSibling({siblingId:nodeId, parentId:nodeId}))
+          }
+        } 
         >
-        addsiblingnext
+        {/* addsiblingnext */}
+        <FontAwesomeIcon icon={faAdd}
+        //  title="add sibling next node"
+         />
       </span>
 
       <span className="zoom-node"
@@ -174,7 +199,8 @@ function Node({nodeId, parentId,addToPath}) {
           addToPathInternal();
           // dispatch(zoomIn(node.id));
         } }>
-        zoomin
+        {/* zoomin */}
+        <FontAwesomeIcon icon={faMagnifyingGlass}/>
       </span>
 
       {!isEdit &&

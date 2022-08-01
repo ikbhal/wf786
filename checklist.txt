@@ -19,3 +19,6 @@ icons for
      expand , 
      close ,
       delete
+---
+bugs
+   add sibling not working as expected at new node at diffent node, proabily parent node
