@@ -67,9 +67,12 @@ export const wfSlice = createSlice({
 
         // delete node in parent nodes
         state.nodes.forEach(n => {
-            let childrenIdsArr = n.childrenIds.split(",");
-            if(childrenIdsArr.indexOf(id) !==-1){
-                n.childrenIds = childrenIdsArr.filter(cid2 => cid2 !=id).join(",")
+            // let childrenIdsArr = n.childrenIds.split(",");
+            // if(childrenIdsArr.indexOf(id) !==-1){
+            //     n.childrenIds = childrenIdsArr.filter(cid2 => cid2 !=id).join(",")
+            // }
+            if(n.children.indexOf(id) !=-1 ){
+                n.children.splice(id, 1);
             }
         });
     },
