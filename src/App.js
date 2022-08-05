@@ -25,6 +25,8 @@ import {Search} from './Search';
 import {SaveWf, LoadWf} from './SaveLoad';
 import axios from 'axios';
 import { TREE_MAN_LOAD_URL } from './urls';
+import UserRegisterForm from './components/register_form'
+import UserLoginForm from './components/login_form'
 
 function App() {
 
@@ -57,6 +59,14 @@ function App() {
       
       <div className="App">
 
+        <div className="container">
+          <h2>User register form</h2>
+          <UserRegisterForm/>
+          
+          <hr/>
+          <h3>user login </h3>
+          <UserLoginForm/>
+        </div>
       {/* <div> test <FontAwesomeIcon icon="fa-thin fa-circle-trash" /> </div> */}
       <FontAwesomeIcon icon={faAngleRight} />
       {/* //<FontAwesomeIcon icon="fa-solid fa-angle-right" /> */}

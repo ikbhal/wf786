@@ -20,6 +20,8 @@ icons for
      close ,
       delete
 ---
+add menu button , on click should show menu items( expand all,close all, delte item, add sibling, add child)
+---
 bugs
    zoom is not working
    add sibling not working as expected at new node at diffent node, proabily parent node
